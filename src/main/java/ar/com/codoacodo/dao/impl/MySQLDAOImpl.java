@@ -21,7 +21,7 @@ public class MySQLDAOImpl implements DAO {
     //atributos
     private String tableName;
 
-    //constructor 
+    //constructor
     public MySQLDAOImpl()  {
         this.tableName = "articulos";
     }
@@ -61,7 +61,7 @@ public class MySQLDAOImpl implements DAO {
     @Override
     public void delete(Long id) throws Exception {
         String sql = "delete from "+this.tableName+" where id = ? ";
-        
+
         //Obtener la Conection
         Connection con = AdministradorDeConexiones.getConnection();
 
@@ -82,9 +82,24 @@ public class MySQLDAOImpl implements DAO {
 
     @Override
     public void update(Articulo articulo) {
-        //UPDATE `23049-db`.`articulos` SET `titulo`='dsa1' WHERE  `id`=17;
-        String sql = "UPDATE " + this.tableName + " SET titulo = ?, precio = ?, autor = ? WHERE id = ?";
+        String sql = "UPDATE " + this.tableName + " SET titulo=?, precio=?, autor=? WHERE id=?";
 
+
+        try (Connection con = AdministradorDeConexiones.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, articulo.getTitulo());
+            statement.setDouble(2, articulo.getPrecio());
+            statement.setString(3, articulo.getAutor());
+            statement.setLong(4, articulo.getId());
+
+            statement.executeUpdate();
+
+
+        } catch (SQLException e) {
+            // Manejar la excepción
+            e.getStackTrace();
+        }
     }
 
     @Override
@@ -103,12 +118,12 @@ public class MySQLDAOImpl implements DAO {
         pst.setString(2,articulo.getAutor());
         pst.setDouble(3,articulo.getPrecio());
         pst.setDate(4, this.dateFrom(articulo.getFechaCreacion()));//fecha LocalDateTime > jdbc > java.sql.Date
-        pst.setInt(5,articulo.isNovedad() ? 1 : 0);        
-        pst.setString(6,articulo.getCodigo());        
+        pst.setInt(5,articulo.isNovedad() ? 1 : 0);
+        pst.setString(6,articulo.getCodigo());
 
         //RestultSet
         pst.executeUpdate();//INSERT/UPDATE/DELETE
-    }    
+    }
 
     private Date dateFrom(LocalDateTime ldt) {
         java.util.Date date = Date.from(ldt.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -147,7 +162,7 @@ public class MySQLDAOImpl implements DAO {
             String codigo = res.getString(7);
             Double precio = res.getDouble(8);
 
-            boolean esNovedad = novedad.equals(1L);//long 
+            boolean esNovedad = novedad.equals(1L);//long
             //TODO:
             //LocalDateTime ldt = LocalDateTime.ofInstant(fechaCreacion.toInstant(),ZoneId.systemDefault());
 
