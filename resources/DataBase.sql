@@ -34,6 +34,11 @@ CREATE TABLE IF NOT EXISTS `articulos` (
   UNIQUE KEY `codigo` (`codigo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Volcado de datos para la tabla `articulos`
+INSERT INTO `articulos` (`id`, `titulo`, `imagen`, `autor`, `novedad`, `fecha_creacion`, `codigo`, `precio`) VALUES
+(18, 'Joel Benjamin Fiaré', NULL, 'dasd', 0, '2023-07-15 00:00:00', 'dasd', 12321300),
+(20, 'joel fiare dsadsdas', NULL, '123', 0, '2023-07-16 00:00:00', '123', 312311);
+
 -- La exportación de datos fue deseleccionada.
 
 -- Volcando estructura para tabla 23049-db.curso
